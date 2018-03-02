@@ -85,7 +85,6 @@ class Person
     }
 
     //ajout d'une méthode apres LES SETTERS/GETTERS
-
     public function getFullname() {
         return $this->firstname.' '.$this->lastname ;
     }   

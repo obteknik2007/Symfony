@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Person;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use function dump;
@@ -40,7 +41,7 @@ class PersonController extends Controller
      * @Route("/{id}",requirements={"id":"\d+"}) //annotation
      * @param int $id //commentaire de documentation
      */
-        public function detail($id)
+    public function detail($id)
     {
         //ns reprenons les 2 lignes de la méthode précédente
         $em = $this->getDoctrine()->getManager();
@@ -63,5 +64,48 @@ class PersonController extends Controller
         ]);        
     }
     
+    /**
+     * @Route("/search") //annotation
+     * 
+     */
+    public function search(Request $request)
+    {
+        $person = null; //pour éviter d'avoir un undefined variable à l'affichage page
+        
+        if($request->isMethod('POST')){
+            $em = $this->getDoctrine()->getManager();
+            $personRepository = $em->getRepository(Person::class);
+        
+            $person = $personRepository->findOneBy([ // renvoie 1 ou 0 résultat
+                'email' => $request->request->get('email')
+            ]); //on pourait rajouter d'autres champs et la clause va être construite en adéquation
+        }
+        
+        return $this->render('person/search.html.twig', 
+        [
+            'person' => $person
+        ]);        
+    }
+        /**
+        * @Route("/search/lastname") 
+        */
+        public function searchByLastname(Request $request)
+    {
+        $persons = []; //il peut y avoir des noms égaux
+        
+        if($request->isMethod('POST')){
+            $em = $this->getDoctrine()->getManager();
+            $personRepository = $em->getRepository(Person::class);
+        
+            $persons = $personRepository->findBy([ // renvoie 1 ou 0 résultat
+                'lastname' => $request->request->get('lastname')
+            ]); 
+        }
+        
+        return $this->render('person/search_by_lastname.html.twig', 
+        [
+            'persons' => $persons
+        ]);        
+    }
     
 }

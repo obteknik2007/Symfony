@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <form method="post">
+        <label>Nom : </label>
+        <input type="text" name="lastname">
+        <button type="submit">Rechercher par nom</button>
+    </form>
+    
+    <table border="1px">
+            <tr>
+                <th>Id</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Prénom et nom</th>
+                <th>Email</th>
+                <th>Date de naissance</th>
+            </tr>
+
+            {% for person in persons %}
+                <tr>
+                    <td><a href="{{ path('app_person_detail',{id: person.id }) }}">{{ person.id }}</a></td>
+                    <td>{{person.firstname }}</td>
+                    <td>{{person.lastname }}</td>
+                    {# ligne ci-dessous utilisation de la méthode créée manuellement 
+                    dans le fihcier Person.php lg 89 #}
+                    <td>{{person.fullname }}</td> 
+                    <td>{{person.email }}</td>
+                    <td>{{person.birthdate|date('d/m/Y') }}</td>                
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">Aucun résultat</td>
+                </tr>
+            {% endfor %}
+        </table>
+{% endblock %}
