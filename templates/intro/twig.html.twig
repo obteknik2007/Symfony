@@ -1,0 +1,146 @@
+{# surcharge de la vue base.html.twig #}
+{% extends 'base.html.twig' %}
+
+{# Déclaration d'une variable #}
+{% set bonjour = 'hello' %}
+
+{# remplace le bloc body de base.html.twig #}
+{% block body %}
+    <p>{{ bonjour }}</p>
+    
+    {# équivalent de var_dump #}  
+    {{ dump(bonjour) }}
+
+    {# structure conditionnelle #}  
+    {% if bonjour == 'hello' %}
+        <p>La variable bonjour vaut 'hello'</p>
+    {% endif %}
+
+    {% set int = 3 %}
+
+    {% if int > 2 %}
+        <p>int est inférieur à 1</p>
+    {% else %}
+        <p>int vaut 1 ou 2</p>
+    {% endif %}
+
+    {# équivalent d'isset() en PHP #}  
+    {% if int is defined %}
+        <p>int existe</p>
+    {% endif %}
+
+    {% if int is null %}
+        <p>int vaut null</p>
+    {% endif %}
+
+    {# is #} 
+    {% if int is empty %}
+        <p>int est vide</p>
+    {% endif %}
+    
+    {# is not #}
+    {% if int is not empty %}
+        <p>int n'est pas vide</p>
+    {% endif %}
+
+    {# and = && #}  
+    {% if int > 2 and bonjour == 'hello' %}
+        <p>Les 2 conditions sont remplies</p>
+    {% endif %}
+    
+    {# or = || #}  
+    {% if int > 2 or bonjour == 'hello' %}
+        <p>Une des 2 conditions est remplie</p>
+    {% endif %}    
+    
+    {# déclaration d'un tableau #}  
+    {% set pronoms = ['je','tu','il'] %}
+    
+    {# foreach ($pronom as $pronom) #}
+    {% for pronom in pronoms %}    
+        {{ pronom }}<br>
+    {% endfor %}  
+    
+    {# foreach ($pronom as $indice => $pronom) avec recuperation de clé #}
+    {% for indice,pronom in pronoms %}   
+        {{ indice }} : {{ pronom }}<br>
+    {% endfor %}          
+    
+    {# féquivalent de in_array() en PHP qui renvoie un booléen #}
+    {% if int in [1,2,3] %}
+        <p>int vaut 1,2 ou 3</p>
+    {% endif %} 
+
+    {# 2 syntaxes pour accéder à l'élément d'un tableau par sa clé #}
+    {{ dump(pronoms[0]) }}
+    {{ dump(pronoms.0) }}
+    
+{% for test in [] %}
+        {{ test }}
+    {% else %}
+        <p>Le tableau est vide</p>
+    {% endfor %}
+    
+    {% set users = ['Julien','Thomas','Laurence'] %}
+    
+    {% for user in users %}
+        {# sur quel tour de boucle on est, index 1 #}
+        {{ dump(loop.index) }}
+        
+        {# sur quel tour de boucle on est, index 0 #}
+        {{ dump(loop.index0) }}
+        
+        {% if loop.first %}
+            <p>1er tour de boucle</p>
+        {% endif %}
+        
+        {% if loop.last %}
+            <p>Dernier tour de boucle</p>
+        {% endif %}
+        
+        {# odd pour impair (even pour pair #}
+        {% if loop.index is odd %}
+            <p>Tour de boucle impair</p>
+        {% endif %}
+        
+        {{ user }}
+    {% endfor %}  
+    
+    {% set bouh = 'bouh' %}
+    
+    {# concaténation ~ #}
+    <p>{{ bouh ~ '!' }}</p>
+    
+    {# application du filtre upper (strtoupper() en PHP)  #}
+    <p>{{ bouh|upper }}</p>
+    
+    {# filtre par defaut appliqué si la valeur est vide #}
+    <p>{{ emptyVar|default('emptyVar est vide') }}</p>
+    
+    {% set html = '<p>Du Html</p>' %}
+    
+    {# affiche le contenu du set html #}
+    {# Par défaut le html est échappé #}
+    {{ html }}
+    
+    {# affiche le contenu du set html sans les balises #}
+    {# le filtre raw pour ne pas echapper le html #}
+    {{ html|raw }}
+    
+    {# filtre de formatage de date #}
+    <p>{{ now|date('d/m/Y') }}</p>
+    
+    {# inclusion de fichier #}
+    {#{% include 'intro/included.html.twig' %}#}
+    
+    {# only pour ne pas passer les variables au fichier inclus #}
+    {# {% include 'intro/included.html.twig' only %} #}
+    
+    {# with passe un tableau de variables en plus de celles de la page #}
+    {% include 'intro/included.html.twig' with {foo:'nouvelle variable'} %}
+    
+    {# with ... only ne passe qu'un tableau de variables #}
+    {% include 'intro/included.html.twig' with {bouh: bouh,foo:'nouvelle variable'} only %}
+    
+    
+{% endblock %}
